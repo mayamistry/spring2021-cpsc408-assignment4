@@ -23,7 +23,7 @@ def genData():
     foods = ["Donut", "Bagel and cream cheese", "Cookie", "Avocado Toast", "Scone", "Breakfast Burrito", "Croissant", "Breakfast Sandwich", "Blueberry Muffin", "Chocolate Chip Muffin", "Chocolate Croissant"]
     drinks = ["Chai Latte", "Cold Brew", "Iced Latte", "Hot Latte", "Iced Tea", "Cappucino", "Flat White", "Black Coffee", "Americano", "Hot Chocolate", "Iced Coffee", "Matcha Latte"]
 
-    for x in range(0, 30):
+    for x in range(0, 50):
         foodIndex = rand.randint(0,10)
         drinkIndex = rand.randint(0,11)
         writer.writerow([fake.company(), fake.phone_number(), fake.random_int(0, 45), fake.random_int(0, 1), fake.random_int(0, 1), fake.random_int(0, 1), fake.random_int(0, 1), foods[foodIndex], fake.random_int(1,10), fake.random_int(3,30), fake.name(), fake.random_int(1,10), fake.paragraph(nb_sentences=2), drinks[drinkIndex], fake.random_int(1,10), fake.random_int(2,30)])
@@ -39,39 +39,16 @@ def importData():
             print("importing information..")
             mycursor.execute("INSERT INTO CoffeeShopTable(CoffeeShopName, PhoneNumber, AverageDriveTimeFromChapman) VALUES (%s, %s, %s);", (row["CoffeeShopName"], row["PhoneNumber"], row["AverageDriveTimeFromChapman"]))
             db.commit()
-            #studentId = mycursor.lastrowid
-            #mycursor.execute("INSERT INTO StudentAddress(StudentId, Street, City, ZipCode) VALUES (%s, %s, %s, %s);", (studentId, row["Street"], row["City"], row["Zip"]))
-            #db.commit()
+            shopRefID = mycursor.lastrowid
+            mycursor.execute("INSERT INTO DrinkTable(DrinkName, ShopID, DrinkRating, Price) VALUES (%s, %s, %s, %s);", (row["DrinkName"], shopRefID, row["DrinkRating"], row["DrinkPrice"]))
+            db.commit()
+            mycursor.execute("INSERT INTO EmployeeTable(EmployeeName, ShopID, EmployeeRating, ReviewDescription) VALUES (%s, %s, %s, %s);",
+                             (row["EmployeeName"], shopRefID, row["EmployeeRating"], row["ReviewDescription"]))
+            db.commit()
+            mycursor.execute("INSERT INTO FoodTable(FoodName, ShopID, FoodRating, Price) VALUES (%s, %s, %s, %s);",
+                             (row["FoodName"], shopRefID, row["FoodRating"], row["FoodPrice"]))
+            db.commit()
+            mycursor.execute("INSERT INTO StudySpotsTable(ShopID, WiFi, IndoorSeating, Outlets, Music) VALUES (%s, %s, %s, %s, %s);",
+                             (shopRefID, row["WiFi"], row["IndoorSeating"], row["Outlets"], row["Music"]))
+            db.commit()
             print("import successful")
-
-
-
-#INITAL PART - SELECT
-# mycursor.execute("SELECT * FROM StudentTable;")
-# data = mycursor.fetchall()
-#
-# for d in data:
-#     print(d[1])
-#     print(d[4])
-
-#SECOND PART - INSERT
-# #%s is how you do parameter binding in mySQL to avoid SQL Injection
-# mycursor.execute("INSERT INTO StudentTable(FirstName, LastName, Major, GPA) VALUES (%s, %s, %s, %s);", ('bar','foo','MATH','3.9'))
-# #commit this change to the database
-# db.commit()
-#
-# #rene will go over this later --> gives the id of the last record created and this is
-# #important because you can use this as foreign key in other tables when more tables get involved
-# studentId = mycursor.lastrowid
-#
-# print('created new student: ', studentId)
-
-#THIRD PART - UPDATE
-# mycursor.execute("UPDATE StudentTable SET Major = %s"
-#                  "WHERE StudentId = %s;", ('MUSIC', 4))
-
-#db.commit()
-#print("Successful!")
-
-
-#importData()
