@@ -11,14 +11,10 @@ db = mysql.connector.connect(
     database = "CoffeeShopDB"
 )
 
-def genData():
+def genData(fileName, numRecords):
     #need to create an instance of faker
     fake = Faker()
     #generate data and then right to a file
-
-    #command line prompt stuff
-    fileName = input("Enter the name of the csv file you would like to create: ")
-    numRecords = int(input("Enter the number of records you would like to create: "))
 
     csv_file = open(fileName, "w")
     writer = csv.writer(csv_file)
@@ -34,9 +30,9 @@ def genData():
 
 
 #allows you to execute mySQL statements
-def importData():
+def importData(fileName):
     mycursor = db.cursor()
-    with open("./mydata.csv") as csvfile:
+    with open(fileName) as csvfile:
        reader = csv.DictReader(csvfile)
 
        for row in reader:
